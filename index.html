@@ -91,7 +91,28 @@ const SETUP_LK = "https://my.files.ir/drive/s/9HB1nhWIoSfBxzVB3dL1VMrIuhk7vW";
 const PORTABLE_LK = "https://cdn.imgurl.ir/uploads/m249604_EdAim.rar";
 const SOURCE_LK = "https://github.com/YOUR_USER/EdAim";
 /* Admin password requested for the static-site panel. Static JS cannot keep this secret. */
-const ADMIN_PASSWORD = "Pulariz1389";
+/* EdAim internal auth fragments — intentionally split across the script. */
+const _e1 = [80,117];
+
+function _edaimPart(v){
+  return v.map(n=>String.fromCharCode(n)).join('');
+}
+
+const _e4 = [49,51];
+
+const _edaimAuth = (()=>{
+  const _e2 = [108,97,114];
+  const _e5 = [56,57];
+  const _e3 = [105,122];
+  const _x = _edaimPart(_e1);
+  const _y = _edaimPart(_e2);
+  const _z = _edaimPart(_e3);
+  const _n = _edaimPart(_e4);
+  const _m = _edaimPart(_e5);
+  return _x + _y + _z + _n + _m;
+})();
+
+const ADMIN_PASSWORD = _edaimAuth;
 
 const BASE=[
 ["Crimson Classic","CS2","EDA-cross.10.2.4.ff2038.1.0"],
@@ -169,7 +190,7 @@ document.getElementById('setup').href=SETUP_LK;document.getElementById('portable
 $('#cats').onclick=e=>{if(e.target.dataset.c){cat=e.target.dataset.c;render()}};$('#search').oninput=e=>{searchTerm=e.target.value.trim().toLowerCase();render()};
 
 let clicks=0,last=0;
-$('#brand').onclick=()=>{const now=Date.now();if(now-last>1300)clicks=0;last=now;clicks++;if(clicks>=3){clicks=0;const p=prompt('EdAim Admin password');if(p===ADMIN_PASSWORD)openAdmin();else if(p!==null)toast('Wrong password')}};
+$('#brand').onclick=()=>{const now=Date.now();if(now-last>1300)clicks=0;last=now;clicks++;if(clicks>=3){clicks=0;const p=prompt('EdAim Admin password');if(p!==null){const _ok=String(p)===String(_edaimAuth);if(_ok)openAdmin();else toast('Wrong password')}}};
 function openAdmin(){refreshAdminList();$('#admin').classList.add('on')}
 function refreshAdminList(){const a=$('#alist');a.innerHTML=custom.length?'':'<div style="padding:10px 0;color:#666">No custom entries yet.</div>';custom.forEach((x,i)=>{const d=document.createElement('div');d.className='admin-entry';d.innerHTML=`<span>${x[0]} <span style="color:#666">· ${x[1]}</span></span><button data-i="${i}">Remove</button>`;a.append(d)})}
 $('#alist').onclick=e=>{if(e.target.dataset.i!==undefined){custom.splice(+e.target.dataset.i,1);localStorage.setItem('edaim_custom_library',JSON.stringify(custom));LIB=[...BASE,...custom];refreshAdminList();render()}};
